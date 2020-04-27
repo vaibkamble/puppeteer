@@ -18,6 +18,9 @@ import {helper, assert, debugError} from './helper';
 import {ExecutionContext} from './ExecutionContext';
 import {CDPSession} from './Connection';
 import {KeyInput} from './USKeyboardLayout';
+import {customQueryFunctions} from './QueryFunction';
+
+const SEARCH_SEPARATOR = '/';
 
 interface BoxModel {
   content: Array<{x: number; y: number}>;
@@ -426,8 +429,18 @@ export class ElementHandle extends JSHandle {
   }
 
   async $(selector: string): Promise<ElementHandle | null> {
-    const handle = await this.evaluateHandle(
-        (element, selector) => element.querySelector(selector),
+    let handler = (element: Element, selector: string): ElementHandle => element.querySelector(selector) as unknown as ElementHandle;
+    if (selector.indexOf(SEARCH_SEPARATOR) !== -1) {
+      const [name, updatedSelector] = selector.split(SEARCH_SEPARATOR);
+      const queryFunction = customQueryFunctions().get(name);
+      if (!queryFunction)
+        throw new Error(`$ query set to use "${name}", but no query function of that name was found`);
+
+      handler = queryFunction as typeof handler;
+      selector = updatedSelector;
+    }
+
+    const handle = await this.evaluateHandle(handler,
         selector
     );
     const element = handle.asElement();
@@ -442,10 +455,18 @@ export class ElementHandle extends JSHandle {
    * @return {!Promise<!Array<!ElementHandle>>}
    */
   async $$(selector: string): Promise<ElementHandle[]> {
-    const arrayHandle = await this.evaluateHandle(
-        (element, selector) => element.querySelectorAll(selector),
-        selector
-    );
+    let handler = (element: Element, selector: string): ElementHandle[] => element.querySelectorAll(selector) as unknown as ElementHandle[];
+    if (selector.indexOf(SEARCH_SEPARATOR) !== -1) {
+      const [name, updatedSelector] = selector.split(SEARCH_SEPARATOR);
+      const queryFunction = customQueryFunctions().get(name);
+      if (!queryFunction)
+        throw new Error(`$$ query set to use "${name}", but no query function of that name was found`);
+
+      handler = queryFunction as typeof handler;
+      selector = updatedSelector;
+    }
+
+    const arrayHandle = await this.evaluateHandle(handler, selector);
     const properties = await arrayHandle.getProperties();
     await arrayHandle.dispose();
     const result = [];

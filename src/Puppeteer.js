@@ -17,6 +17,7 @@ const Launcher = require('./Launcher');
 const {BrowserFetcher} = require('./BrowserFetcher');
 const Errors = require('./Errors');
 const DeviceDescriptors = require('./DeviceDescriptors');
+const QueryFunction = require('./QueryFunction');
 
 module.exports = class {
   /**
@@ -31,6 +32,7 @@ module.exports = class {
     this._isPuppeteerCore = isPuppeteerCore;
     // track changes to Launcher configuration via options or environment variables
     this.__productName = productName;
+    this._customQueryFunctions = new Map();
   }
 
   /**
@@ -143,5 +145,24 @@ module.exports = class {
    */
   createBrowserFetcher(options) {
     return new BrowserFetcher(this._projectRoot, options);
+  }
+
+  /**
+   * @param {string} name
+   * @param {!Function} queryFunction
+   */
+  registerCustomQueryFunction(name, queryFunction) {
+    QueryFunction.registerCustomQueryFunction(name, queryFunction);
+  }
+
+  /**
+   * @param {string} name
+   */
+  unregisterCustomQueryFunction(name) {
+    QueryFunction.unregisterCustomQueryFunction(name);
+  }
+
+  customQueryFunctions() {
+    return QueryFunction.customQueryFunctions();
   }
 };
