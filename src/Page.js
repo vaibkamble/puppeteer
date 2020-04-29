@@ -34,6 +34,9 @@ const {Worker: PuppeteerWorker} = require('./Worker');
 const {Browser, BrowserContext} = require('./Browser');
 // Import used as typedef
 // eslint-disable-next-line no-unused-vars
+const {Target} = require('./Target');
+// Import used as typedef
+// eslint-disable-next-line no-unused-vars
 const {createJSHandle, JSHandle, ElementHandle} = require('./JSHandle');
 const {Accessibility} = require('./Accessibility');
 const {TimeoutSettings} = require('./TimeoutSettings');
@@ -47,7 +50,7 @@ const writeFileAsync = helper.promisify(fs.writeFile);
 class Page extends EventEmitter {
   /**
    * @param {!CDPSession} client
-   * @param {!Puppeteer.Target} target
+   * @param {!Target} target
    * @param {boolean} ignoreHTTPSErrors
    * @param {?Puppeteer.Viewport} defaultViewport
    * @param {!TaskQueue} screenshotTaskQueue
@@ -63,7 +66,7 @@ class Page extends EventEmitter {
 
   /**
    * @param {!CDPSession} client
-   * @param {!Puppeteer.Target} target
+   * @param {!Target} target
    * @param {boolean} ignoreHTTPSErrors
    * @param {!TaskQueue} screenshotTaskQueue
    */
@@ -200,7 +203,7 @@ class Page extends EventEmitter {
   }
 
   /**
-   * @return {!Puppeteer.Target}
+   * @return {!Target}
    */
   target() {
     return this._target;
