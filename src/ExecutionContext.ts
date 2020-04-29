@@ -17,16 +17,17 @@
 import {helper, assert} from './helper';
 import {createJSHandle, JSHandle, ElementHandle} from './JSHandle';
 import {CDPSession} from './Connection';
+import {DOMWorld} from './DOMWorld';
 
 export const EVALUATION_SCRIPT_URL = '__puppeteer_evaluation_script__';
 const SOURCE_URL_REGEX = /^[\040\t]*\/\/[@#] sourceURL=\s*(\S*?)\s*$/m;
 
 export class ExecutionContext {
   _client: CDPSession;
-  _world: Puppeteer.DOMWorld;
+  _world: DOMWorld;
   _contextId: number;
 
-  constructor(client: CDPSession, contextPayload: Protocol.Runtime.ExecutionContextDescription, world: Puppeteer.DOMWorld) {
+  constructor(client: CDPSession, contextPayload: Protocol.Runtime.ExecutionContextDescription, world: DOMWorld) {
     this._client = client;
     this._world = world;
     this._contextId = contextPayload.id;
@@ -72,7 +73,7 @@ export class ExecutionContext {
     let functionText = pageFunction.toString();
     try {
       new Function('(' + functionText + ')');
-    } catch (e1) {
+    } catch (error) {
       // This means we might have a function shorthand. Try another
       // time prefixing 'function '.
       if (functionText.startsWith('async '))
@@ -81,7 +82,7 @@ export class ExecutionContext {
         functionText = 'function ' + functionText;
       try {
         new Function('(' + functionText  + ')');
-      } catch (e2) {
+      } catch (error) {
         // We tried hard to serialize, but there's a weird beast here.
         throw new Error('Passed function is not well-serializable!');
       }
@@ -96,10 +97,10 @@ export class ExecutionContext {
         awaitPromise: true,
         userGesture: true
       });
-    } catch (err) {
-      if (err instanceof TypeError && err.message.startsWith('Converting circular structure to JSON'))
-        err.message += ' Are you passing a nested JSHandle?';
-      throw err;
+    } catch (error) {
+      if (error instanceof TypeError && error.message.startsWith('Converting circular structure to JSON'))
+        error.message += ' Are you passing a nested JSHandle?';
+      throw error;
     }
     const {exceptionDetails, result: remoteObject} = await callFunctionOnPromise.catch(rewriteError);
     if (exceptionDetails)

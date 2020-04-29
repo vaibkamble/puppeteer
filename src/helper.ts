@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Errors = require('./Errors');
-
-import debug = require('debug');
-import fs = require('fs');
-import promisify = require('./promisify');
+import {TimeoutError} from './Errors';
+import * as debug from 'debug';
+import * as fs from 'fs';
 import {CDPSession} from './Connection';
-
-const {TimeoutError} = Errors;
+import {promisify} from 'util';
 
 const openAsync = promisify(fs.open);
 const writeAsync = promisify(fs.write);
@@ -93,12 +90,12 @@ function installAsyncStackHooks(classType: AnyClass): void {
         stack: ''
       };
       Error.captureStackTrace(syncStack);
-      return method.call(this, ...args).catch(e => {
+      return method.call(this, ...args).catch(error => {
         const stack = syncStack.stack.substring(syncStack.stack.indexOf('\n') + 1);
         const clientStack = stack.substring(stack.indexOf('\n'));
-        if (e instanceof Error && e.stack && !e.stack.includes(clientStack))
-          e.stack += '\n  -- ASYNC --\n' + stack;
-        throw e;
+        if (error instanceof Error && error.stack && !error.stack.includes(clientStack))
+          error.stack += '\n  -- ASYNC --\n' + stack;
+        throw error;
       });
     });
   }
@@ -152,9 +149,9 @@ async function waitForEvent<T extends any>(emitter: NodeJS.EventEmitter, eventNa
   const result = await Promise.race([promise, abortPromise]).then(r => {
     cleanup();
     return r;
-  }, e => {
+  }, error => {
     cleanup();
-    throw e;
+    throw error;
   });
   if (result instanceof Error)
     throw result;

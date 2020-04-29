@@ -6,6 +6,8 @@
 - API Translations: [中文|Chinese](https://zhaoqize.github.io/puppeteer-api-zh_CN/#/)
 - Troubleshooting: [troubleshooting.md](https://github.com/puppeteer/puppeteer/blob/master/docs/troubleshooting.md)
 - Releases per Chromium Version:
+  * Chromium 81.0.4044.0 - [Puppeteer v3.0.2](https://github.com/puppeteer/puppeteer/blob/v3.0.2/docs/api.md)
+  * Chromium 81.0.4044.0 - [Puppeteer v3.0.1](https://github.com/puppeteer/puppeteer/blob/v3.0.1/docs/api.md)
   * Chromium 81.0.4044.0 - [Puppeteer v3.0.0](https://github.com/puppeteer/puppeteer/blob/v3.0.0/docs/api.md)
   * Chromium 80.0.3987.0 - [Puppeteer v2.1.0](https://github.com/puppeteer/puppeteer/blob/v2.1.0/docs/api.md)
   * Chromium 79.0.3942.0 - [Puppeteer v2.0.0](https://github.com/puppeteer/puppeteer/blob/v2.0.0/docs/api.md)
@@ -1554,7 +1556,7 @@ Shortcut for [page.mainFrame().focus(selector)](#framefocusselector).
 #### page.goBack([options])
 - `options` <[Object]> Navigation parameters which might have the following properties:
   - `timeout` <[number]> Maximum navigation time in milliseconds, defaults to 30 seconds, pass `0` to disable timeout. The default value can be changed by using the [page.setDefaultNavigationTimeout(timeout)](#pagesetdefaultnavigationtimeouttimeout) or [page.setDefaultTimeout(timeout)](#pagesetdefaulttimeouttimeout) methods.
-  - `waitUntil` <[string]|[Array]<[string]>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
+  - `waitUntil` <"load"|"domcontentloaded"|"networkidle0"|"networkidle2"|Array<PuppeteerLifeCycleMethod>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
     - `load` - consider navigation to be finished when the `load` event is fired.
     - `domcontentloaded` - consider navigation to be finished when the `DOMContentLoaded` event is fired.
     - `networkidle0` - consider navigation to be finished when there are no more than 0 network connections for at least `500` ms.
@@ -1567,7 +1569,7 @@ Navigate to the previous page in history.
 #### page.goForward([options])
 - `options` <[Object]> Navigation parameters which might have the following properties:
   - `timeout` <[number]> Maximum navigation time in milliseconds, defaults to 30 seconds, pass `0` to disable timeout. The default value can be changed by using the [page.setDefaultNavigationTimeout(timeout)](#pagesetdefaultnavigationtimeouttimeout) or [page.setDefaultTimeout(timeout)](#pagesetdefaulttimeouttimeout) methods.
-  - `waitUntil` <[string]|[Array]<[string]>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
+  - `waitUntil` <"load"|"domcontentloaded"|"networkidle0"|"networkidle2"|Array<PuppeteerLifeCycleMethod>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
     - `load` - consider navigation to be finished when the `load` event is fired.
     - `domcontentloaded` - consider navigation to be finished when the `DOMContentLoaded` event is fired.
     - `networkidle0` - consider navigation to be finished when there are no more than 0 network connections for at least `500` ms.
@@ -1581,7 +1583,7 @@ Navigate to the next page in history.
 - `url` <[string]> URL to navigate page to. The url should include scheme, e.g. `https://`.
 - `options` <[Object]> Navigation parameters which might have the following properties:
   - `timeout` <[number]> Maximum navigation time in milliseconds, defaults to 30 seconds, pass `0` to disable timeout. The default value can be changed by using the [page.setDefaultNavigationTimeout(timeout)](#pagesetdefaultnavigationtimeouttimeout) or [page.setDefaultTimeout(timeout)](#pagesetdefaulttimeouttimeout) methods.
-  - `waitUntil` <[string]|[Array]<[string]>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
+  - `waitUntil` <"load"|"domcontentloaded"|"networkidle0"|"networkidle2"|Array<PuppeteerLifeCycleMethod>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
     - `load` - consider navigation to be finished when the `load` event is fired.
     - `domcontentloaded` - consider navigation to be finished when the `DOMContentLoaded` event is fired.
     - `networkidle0` - consider navigation to be finished when there are no more than 0 network connections for at least `500` ms.
@@ -1742,7 +1744,7 @@ Shortcut for [page.mainFrame().executionContext().queryObjects(prototypeHandle)]
 #### page.reload([options])
 - `options` <[Object]> Navigation parameters which might have the following properties:
   - `timeout` <[number]> Maximum navigation time in milliseconds, defaults to 30 seconds, pass `0` to disable timeout. The default value can be changed by using the [page.setDefaultNavigationTimeout(timeout)](#pagesetdefaultnavigationtimeouttimeout) or [page.setDefaultTimeout(timeout)](#pagesetdefaulttimeouttimeout) methods.
-  - `waitUntil` <[string]|[Array]<[string]>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
+  - `waitUntil` <"load"|"domcontentloaded"|"networkidle0"|"networkidle2"|Array<PuppeteerLifeCycleMethod>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
     - `load` - consider navigation to be finished when the `load` event is fired.
     - `domcontentloaded` - consider navigation to be finished when the `DOMContentLoaded` event is fired.
     - `networkidle0` - consider navigation to be finished when there are no more than 0 network connections for at least `500` ms.
@@ -1800,7 +1802,7 @@ Toggles ignoring cache for each request based on the enabled state. By default, 
 - `html` <[string]> HTML markup to assign to the page.
 - `options` <[Object]> Parameters which might have the following properties:
   - `timeout` <[number]> Maximum time in milliseconds for resources to load, defaults to 30 seconds, pass `0` to disable timeout. The default value can be changed by using the [page.setDefaultNavigationTimeout(timeout)](#pagesetdefaultnavigationtimeouttimeout) or [page.setDefaultTimeout(timeout)](#pagesetdefaulttimeouttimeout) methods.
-  - `waitUntil` <[string]|[Array]<[string]>> When to consider setting markup succeeded, defaults to `load`. Given an array of event strings, setting content is considered to be successful after all events have been fired. Events can be either:
+  - `waitUntil` <"load"|"domcontentloaded"|"networkidle0"|"networkidle2"|Array<PuppeteerLifeCycleMethod>> When to consider setting markup succeeded, defaults to `load`. Given an array of event strings, setting content is considered to be successful after all events have been fired. Events can be either:
     - `load` - consider setting content to be finished when the `load` event is fired.
     - `domcontentloaded` - consider setting content to be finished when the `DOMContentLoaded` event is fired.
     - `networkidle0` - consider setting content to be finished when there are no more than 0 network connections for at least `500` ms.
@@ -2101,7 +2103,7 @@ Shortcut for [page.mainFrame().waitForFunction(pageFunction[, options[, ...args]
 #### page.waitForNavigation([options])
 - `options` <[Object]> Navigation parameters which might have the following properties:
   - `timeout` <[number]> Maximum navigation time in milliseconds, defaults to 30 seconds, pass `0` to disable timeout. The default value can be changed by using the [page.setDefaultNavigationTimeout(timeout)](#pagesetdefaultnavigationtimeouttimeout) or [page.setDefaultTimeout(timeout)](#pagesetdefaulttimeouttimeout) methods.
-  - `waitUntil` <[string]|[Array]<[string]>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
+  - `waitUntil` <"load"|"domcontentloaded"|"networkidle0"|"networkidle2"|Array<PuppeteerLifeCycleMethod>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
     - `load` - consider navigation to be finished when the `load` event is fired.
     - `domcontentloaded` - consider navigation to be finished when the `DOMContentLoaded` event is fired.
     - `networkidle0` - consider navigation to be finished when there are no more than 0 network connections for at least `500` ms.
@@ -2804,7 +2806,7 @@ If there's no element matching `selector`, the method throws an error.
 - `url` <[string]> URL to navigate frame to. The url should include scheme, e.g. `https://`.
 - `options` <[Object]> Navigation parameters which might have the following properties:
   - `timeout` <[number]> Maximum navigation time in milliseconds, defaults to 30 seconds, pass `0` to disable timeout. The default value can be changed by using the [page.setDefaultNavigationTimeout(timeout)](#pagesetdefaultnavigationtimeouttimeout) or [page.setDefaultTimeout(timeout)](#pagesetdefaulttimeouttimeout) methods.
-  - `waitUntil` <[string]|[Array]<[string]>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
+  - `waitUntil` <"load"|"domcontentloaded"|"networkidle0"|"networkidle2"|Array<PuppeteerLifeCycleMethod>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
     - `load` - consider navigation to be finished when the `load` event is fired.
     - `domcontentloaded` - consider navigation to be finished when the `DOMContentLoaded` event is fired.
     - `networkidle0` - consider navigation to be finished when there are no more than 0 network connections for at least `500` ms.
@@ -2867,7 +2869,7 @@ frame.select('select#colors', 'red', 'green', 'blue'); // multiple selections
 - `html` <[string]> HTML markup to assign to the page.
 - `options` <[Object]> Parameters which might have the following properties:
   - `timeout` <[number]> Maximum time in milliseconds for resources to load, defaults to 30 seconds, pass `0` to disable timeout. The default value can be changed by using the [page.setDefaultNavigationTimeout(timeout)](#pagesetdefaultnavigationtimeouttimeout) or [page.setDefaultTimeout(timeout)](#pagesetdefaulttimeouttimeout) methods.
-  - `waitUntil` <[string]|[Array]<[string]>> When to consider setting markup succeeded, defaults to `load`. Given an array of event strings, setting content is considered to be successful after all events have been fired. Events can be either:
+  - `waitUntil` <"load"|"domcontentloaded"|"networkidle0"|"networkidle2"|Array<PuppeteerLifeCycleMethod>> When to consider setting markup succeeded, defaults to `load`. Given an array of event strings, setting content is considered to be successful after all events have been fired. Events can be either:
     - `load` - consider setting content to be finished when the `load` event is fired.
     - `domcontentloaded` - consider setting content to be finished when the `DOMContentLoaded` event is fired.
     - `networkidle0` - consider setting content to be finished when there are no more than 0 network connections for at least `500` ms.
@@ -2968,7 +2970,7 @@ await page.waitForFunction(selector => !!document.querySelector(selector), {}, s
 #### frame.waitForNavigation([options])
 - `options` <[Object]> Navigation parameters which might have the following properties:
   - `timeout` <[number]> Maximum navigation time in milliseconds, defaults to 30 seconds, pass `0` to disable timeout. The default value can be changed by using the [page.setDefaultNavigationTimeout(timeout)](#pagesetdefaultnavigationtimeouttimeout) or [page.setDefaultTimeout(timeout)](#pagesetdefaulttimeouttimeout) methods.
-  - `waitUntil` <[string]|[Array]<[string]>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
+  - `waitUntil` <"load"|"domcontentloaded"|"networkidle0"|"networkidle2"|Array<PuppeteerLifeCycleMethod>> When to consider navigation succeeded, defaults to `load`. Given an array of event strings, navigation is considered to be successful after all events have been fired. Events can be either:
     - `load` - consider navigation to be finished when the `load` event is fired.
     - `domcontentloaded` - consider navigation to be finished when the `DOMContentLoaded` event is fired.
     - `networkidle0` - consider navigation to be finished when there are no more than 0 network connections for at least `500` ms.

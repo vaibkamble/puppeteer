@@ -1,6 +1,6 @@
 {
   "name": "puppeteer",
-  "version": "3.0.1-post",
+  "version": "3.0.2-post",
   "description": "A high-level API to control headless Chrome over the DevTools Protocol",
   "main": "index.js",
   "repository": "github:puppeteer/puppeteer",
@@ -27,10 +27,9 @@
     "doc": "node utils/doclint/cli.js",
     "tsc": "tsc --version && tsc -p . && cp src/protocol.d.ts lib/ && cp src/externs.d.ts lib/",
     "apply-next-version": "node utils/apply_next_version.js",
-    "bundle": "npm run tsc && npx browserify -r ./index.js:puppeteer -o utils/browser/puppeteer-web.js",
     "test-types": "node utils/doclint/generate_types && tsc --version && tsc -p utils/doclint/generate_types/test/",
-    "unit-bundle": "mocha --config mocha-config/browser-bundle-tests.js",
-    "update-protocol-d-ts": "node utils/protocol-types-generator",
+    "update-protocol-d-ts": "node utils/protocol-types-generator update",
+    "compare-protocol-d-ts": "node utils/protocol-types-generator compare",
     "test-install": "scripts/test-install.sh"
   },
   "files": [
@@ -70,6 +69,7 @@
     "cross-env": "^5.0.5",
     "eslint": "^6.8.0",
     "eslint-plugin-mocha": "^6.3.0",
+    "eslint-plugin-unicorn": "^19.0.1",
     "esprima": "^4.0.0",
     "expect": "^25.2.7",
     "jpeg-js": "^0.3.7",

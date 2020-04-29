@@ -9,7 +9,8 @@ module.exports = {
 
     "plugins": [
         "mocha",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "unicorn"
     ],
 
     "rules": {
@@ -99,7 +100,10 @@ module.exports = {
         }],
 
         // ensure we don't have any it.only or describe.only in prod
-        "mocha/no-exclusive-tests": "error"
+        "mocha/no-exclusive-tests": "error",
+
+        // enforce the variable in a catch block is named error
+        "unicorn/catch-error-name": "error"
     },
     "overrides": [
         {
@@ -116,7 +120,10 @@ module.exports = {
                 "@typescript-eslint/no-empty-function": 0,
                 "@typescript-eslint/no-use-before-define": 0,
                 // We know it's bad and use it very sparingly but it's needed :(
-                "@typescript-eslint/ban-ts-ignore": 0
+                "@typescript-eslint/ban-ts-ignore": 0,
+                "@typescript-eslint/array-type": [2, {
+                    "default": "array-simple"
+                }]
             }
         }
     ]

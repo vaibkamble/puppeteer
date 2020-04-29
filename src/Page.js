@@ -31,6 +31,9 @@ const {Coverage} = require('./Coverage');
 const {Worker: PuppeteerWorker} = require('./Worker');
 // Import used as typedef
 // eslint-disable-next-line no-unused-vars
+const {Browser, BrowserContext} = require('./Browser');
+// Import used as typedef
+// eslint-disable-next-line no-unused-vars
 const {createJSHandle, JSHandle, ElementHandle} = require('./JSHandle');
 const {Accessibility} = require('./Accessibility');
 const {TimeoutSettings} = require('./TimeoutSettings');
@@ -176,9 +179,9 @@ class Page extends EventEmitter {
     let callback;
     const promise = new Promise(x => callback = x);
     this._fileChooserInterceptors.add(callback);
-    return helper.waitWithTimeout(promise, 'waiting for file chooser', timeout).catch(e => {
+    return helper.waitWithTimeout(promise, 'waiting for file chooser', timeout).catch(error => {
       this._fileChooserInterceptors.delete(callback);
-      throw e;
+      throw error;
     });
   }
 
@@ -204,14 +207,14 @@ class Page extends EventEmitter {
   }
 
   /**
-   * @return {!Puppeteer.Browser}
+   * @return {!Browser}
    */
   browser() {
     return this._target.browser();
   }
 
   /**
-   * @return {!Puppeteer.BrowserContext}
+   * @return {!BrowserContext}
    */
   browserContext() {
     return this._target.browserContext();
@@ -675,7 +678,7 @@ class Page extends EventEmitter {
 
   /**
    * @param {string} html
-   * @param {!{timeout?: number, waitUntil?: string|!Array<string>}=} options
+   * @param {!{timeout?: number, waitUntil?: !Puppeteer.PuppeteerLifeCycleEvent|!Array<!Puppeteer.PuppeteerLifeCycleEvent>}=} options
    */
   async setContent(html, options) {
     await this._frameManager.mainFrame().setContent(html, options);
@@ -683,7 +686,7 @@ class Page extends EventEmitter {
 
   /**
    * @param {string} url
-   * @param {!{referer?: string, timeout?: number, waitUntil?: string|!Array<string>}=} options
+   * @param {!{referer?: string, timeout?: number, waitUntil?: !Puppeteer.PuppeteerLifeCycleEvent|!Array<!Puppeteer.PuppeteerLifeCycleEvent>}=} options
    * @return {!Promise<?Puppeteer.Response>}
    */
   async goto(url, options) {
@@ -691,7 +694,7 @@ class Page extends EventEmitter {
   }
 
   /**
-   * @param {!{timeout?: number, waitUntil?: string|!Array<string>}=} options
+   * @param {!{timeout?: number, waitUntil?: !Puppeteer.PuppeteerLifeCycleEvent|!Array<!Puppeteer.PuppeteerLifeCycleEvent>}=} options
    * @return {!Promise<?Puppeteer.Response>}
    */
   async reload(options) {
@@ -705,7 +708,7 @@ class Page extends EventEmitter {
   }
 
   /**
-   * @param {!{timeout?: number, waitUntil?: string|!Array<string>}=} options
+   * @param {!{timeout?: number, waitUntil?: !Puppeteer.PuppeteerLifeCycleEvent|!Array<!Puppeteer.PuppeteerLifeCycleEvent>}=} options
    * @return {!Promise<?Puppeteer.Response>}
    */
   async waitForNavigation(options = {}) {
@@ -755,7 +758,7 @@ class Page extends EventEmitter {
   }
 
   /**
-   * @param {!{timeout?: number, waitUntil?: string|!Array<string>}=} options
+   * @param {!{timeout?: number, waitUntil?: !Puppeteer.PuppeteerLifeCycleEvent|!Array<!Puppeteer.PuppeteerLifeCycleEvent>}=} options
    * @return {!Promise<?Puppeteer.Response>}
    */
   async goBack(options) {
@@ -763,7 +766,7 @@ class Page extends EventEmitter {
   }
 
   /**
-   * @param {!{timeout?: number, waitUntil?: string|!Array<string>}=} options
+   * @param {!{timeout?: number, waitUntil?: !Puppeteer.PuppeteerLifeCycleEvent|!Array<!Puppeteer.PuppeteerLifeCycleEvent>}=} options
    * @return {!Promise<?Puppeteer.Response>}
    */
   async goForward(options) {
@@ -771,7 +774,7 @@ class Page extends EventEmitter {
   }
 
   /**
-   * @param {!{timeout?: number, waitUntil?: string|!Array<string>}=} options
+   * @param {!{timeout?: number, waitUntil?: !Puppeteer.PuppeteerLifeCycleEvent|!Array<!Puppeteer.PuppeteerLifeCycleEvent>}=} options
    * @return {!Promise<?Puppeteer.Response>}
    */
   async _go(delta, options) {
@@ -848,10 +851,10 @@ class Page extends EventEmitter {
   async emulateTimezone(timezoneId) {
     try {
       await this._client.send('Emulation.setTimezoneOverride', {timezoneId: timezoneId || ''});
-    } catch (exception) {
-      if (exception.message.includes('Invalid timezone'))
+    } catch (error) {
+      if (error.message.includes('Invalid timezone'))
         throw new Error(`Invalid timezone ID: ${timezoneId}`);
-      throw exception;
+      throw error;
     }
   }
 
